@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import models from "../models/models"
+import ApiError from "../error/ApiErrorHandler"
 
 class TodoController {
     async getAll (req: Request, res: Response) {
@@ -12,14 +13,16 @@ class TodoController {
         }
     }
 
-    async getOne (req: Request, res: Response) {
+    async getOne (req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params
 
             const task = await models.Task.findOne({ where: { id } })
 
             if (!task) {
-                res.status(404).json({ message: "Задача не найдена" })
+                return next(
+                  ApiError.notFound("Id задачи не найден")
+                );
             }
 
             res.status(200).json(task)    
