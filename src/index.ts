@@ -3,6 +3,7 @@ import express from "express"
 import router from "./routes/index"
 import sequalize from "./db"
 import errorMiddleware from "./middleware/error-middleware"
+import cors from "cors"
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 5000
 app.use(express.json())
 app.use("/api", router)
 app.use(errorMiddleware);
+app.use(cors())
 
 const start = async () => {
     try {
